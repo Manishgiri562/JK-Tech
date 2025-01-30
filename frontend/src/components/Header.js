@@ -1,6 +1,13 @@
+import { useSelector } from 'react-redux';
 import './Header.css';
+import { useEffect } from 'react';
 
 const Header = () => {
+	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+
+	useEffect(() => {
+		console.log('isAuthenticated:', isAuthenticated);
+	}, [isAuthenticated]);
 	return (
 		<header className="header">
 			<nav>
@@ -9,14 +16,14 @@ const Header = () => {
 						<a href="home">Home</a>
 					</li>
 					<li>
-						<a href="blogs">My Blogs</a>
-					</li>
-					<li>
 						<a href="/create">Create Blog</a>
 					</li>
-					<li>
+					{!isAuthenticated && <li>
 						<a href="/login">Login</a>
-					</li>
+					</li>}
+					{isAuthenticated && <li>
+						<a href="/logout">Logout</a>
+					</li>}
 				</ul>
 			</nav>
 		</header>

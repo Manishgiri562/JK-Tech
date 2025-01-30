@@ -9,7 +9,7 @@ export class AuthController {
               private readonly usersService: UsersService,
   ) {}
 
-  @Post('login')
+  @Post('login/google')
   async login(@Body() body: { email: string; password: string }) {
     return this.authService.login(
       await this.authService.validateUser(body.email, body.password),

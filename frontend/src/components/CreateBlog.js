@@ -1,44 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createBlog } from '../redux/actions/blogAction';
 
 const BlogForm = () => {
+	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+	const dispatch = useDispatch();
       const submitRef = React.useRef(null);
 	const [formData, setFormData] = useState({
 		title: '',
 		content: '',
 		tags: '',
 	});
-
+	useEffect(() => {
+		console.log('isAuthenticated:', isAuthenticated);
+	}, [isAuthenticated]);
 	const handleChange = (e) => {
 		setFormData({...formData, [e.target.name]: e.target.value});
-	};
-	const token =
-		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hbmlAMzIxLmNvbSIsInN1YiI6IjY3OTlkNTc3ZDViNWIxYTRlM2U3ZDBkYiIsImlhdCI6MTczODE2NDI2NywiZXhwIjoxNzM4MTY3ODY3fQ.uiwFv382d5QTrdsmdLCXqZktCrvT057lN6fuVLbK-So';
-	const createBlog = async (blog) => {
-		try {
-			const response = await fetch('http://localhost:3000/blogs', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${localStorage.getItem('token') || token}`,
-				},
-				body: JSON.stringify(blog),
-			});
-
-			if (response.ok) {
-				alert('Blog created successfully!');
-			} else {
-				alert('Failed to create blog!');
-			}
-		} catch (error) {
-			console.error('Failed to create blog:', error);
-		}
 	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		console.log('Form Submitted:', formData);
             submitRef.current.disabled = true;
-            await createBlog(formData);
+            dispatch(createBlog(formData));
             submitRef.current.disabled = false;
             setFormData({
                   title: '',
@@ -46,9 +30,12 @@ const BlogForm = () => {
                   tags: '',
             });
 	};
-
+	if(!isAuthenticated){
+		return <h2>Login to create a post</h2>
+	}
 	return (
 		<div className="form-container">
+			
 			<form onSubmit={handleSubmit}>
 				<h2>Create a Post</h2>
 
@@ -67,6 +54,7 @@ const BlogForm = () => {
 					id="content"
 					name="content"
 					value={formData.content}
+					minLength={21}
 					onChange={handleChange}
 					required
 				></textarea>

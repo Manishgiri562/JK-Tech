@@ -1,60 +1,109 @@
-import React, {useState} from 'react';
-import './Login.css';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser, loginWithGoogle } from '../redux/actions/authActions';
+import { GoogleLogin } from '@react-oauth/google';
 
-const Login = () => {
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+const LoginForm = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
-      const dispatch = useDispatch();
+  const handleGoogleSuccess = (credentialResponse) => {
+    dispatch(loginWithGoogle(credentialResponse.credential));
+  };
 
-	const login = async (email, password) => {
-		const response = await fetch('http://localhost:3000/auth/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({email, password}),
-		});
-		const data = await response.json();
-		if(data.access_token){
-                  localStorage.setItem('token', data.access_token);
-            }
-	};
+  const handleGoogleError = () => {
+    console.error('Google login failed');
+  };
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		console.log('Email:', email, 'Password:', password);
-		await login(email, password);
-	};
+  return (
+    <>
+      <div className="login-container">
+        <h2 className="login-title">Login</h2>
+        
+        {error && <div className="error-message">{error}</div>}
 
-	return (
-		<div className="login-container">
-			<form className="login-form" onSubmit={handleSubmit}>
-				<h2>Login</h2>
-				<div className="input-group">
-					<label>Email</label>
-					<input
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						required
-					/>
-				</div>
-				<div className="input-group">
-					<label>Password</label>
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						required
-					/>
-				</div>
-				<button type="submit">Login</button>
-			</form>
-		</div>
-	);
+        <div className="mb-6">
+          <GoogleLogin onSuccess={handleGoogleSuccess} onError={handleGoogleError} useOneTap />
+        </div>
+      </div>
+	<style>
+        {`
+          .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }
+
+          .login-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+          }
+
+          .error-message {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #ffe5e5;
+            color: #d9534f;
+            border-radius: 5px;
+          }
+
+          .or-divider {
+            position: relative;
+            margin: 20px 0;
+            text-align: center;
+          }
+
+          .or-divider hr {
+            border: none;
+            height: 1px;
+            background: #ccc;
+            margin: 0;
+          }
+
+          .or-divider span {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 0 10px;
+            color: #777;
+          }
+
+          .input-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+          }
+
+          .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+          }
+
+          .submit-btn:hover {
+            background: #0056b3;
+          }
+        `}
+      </style>
+    </>
+  );
 };
 
-export default Login;
+export default LoginForm;

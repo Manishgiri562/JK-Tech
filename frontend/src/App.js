@@ -6,26 +6,30 @@ import Header from './components/Header';
 import store from './redux/store';
 import { Provider, useSelector } from 'react-redux';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import Home from './components/HomeComponent';
 import MyBlogs from './components/MyBlogComp';
 import BlogForm from './components/CreateBlog';
 import Login from './components/LoginComponent';
+import { Logout } from './components/Logout';
 
 function App() {
   const blogs = useSelector(state => state.blog.AllBlogs);
 
   return (
+    <GoogleOAuthProvider clientId="598434440057-4o5u6b53q8nelcuq4l6fpaiflhv59han.apps.googleusercontent.com">
     <Router>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/blogs" element={<MyBlogs />} />
         <Route path="/create" element={<BlogForm/>} />
         <Route path="/blog/:id" element={<BlogInfo />} />
         <Route path='/login' element={<Login />} />
+        <Route path='/logout' element={<Logout />} />
       </Routes>
     </Router>
+    </GoogleOAuthProvider>
   );
 }
 
