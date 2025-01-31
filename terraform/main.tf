@@ -12,7 +12,7 @@ resource "aws_ecr_repository" "backend" {
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = "my-cluster"
+  cluster_name    = "ferocious-electro-party"
   cluster_version = "1.27"
   subnets         = ["subnet-1", "subnet-2", "subnet-3"]
   vpc_id          = "your-vpc-id"
