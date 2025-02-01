@@ -12,17 +12,19 @@ resource "aws_ecr_repository" "backend" {
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
+  version         = "20.33.1" # Check the latest version
   cluster_name    = "ferocious-electro-party"
   cluster_version = "1.27"
-  subnets         = ["subnet-1", "subnet-2", "subnet-3"]
-  vpc_id          = "your-vpc-id"
+  
+  vpc_id  = "your-vpc-id"
+  subnet_ids = ["subnet-1", "subnet-2", "subnet-3"] # ✅ Correct field name
 
-  node_groups = {
+  eks_managed_node_groups = {  # ✅ Correct field name
     eks_nodes = {
-      desired_capacity = 2
-      max_capacity     = 3
-      min_capacity     = 1
-      instance_types   = ["t3.medium"]
+      desired_size = 2
+      max_size     = 3
+      min_size     = 1
+      instance_types = ["t3.medium"]
     }
   }
 }

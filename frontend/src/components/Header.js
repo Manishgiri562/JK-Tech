@@ -6,7 +6,7 @@ const Header = () => {
 	const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
 
 	useEffect(() => {
-		console.log('isAuthenticated:', isAuthenticated);
+		// console.log('isAuthenticated:', isAuthenticated);
 	}, [isAuthenticated]);
 	return (
 		<header className="header">

@@ -15,15 +15,15 @@ constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
     return this.userModel.findById(id).exec(); // Get user by ID
   }
 
-  async createUser(name: string, email: string, age: number, password: string): Promise<User> {
+  async createUser(email: string, name: string, googleId: string, picUrl: string): Promise<User> {
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
-    return this.userModel.create({ name, email, password, age });
+    return this.userModel.create({ name, email, googleId, picUrl });
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userModel.findOne({ email }).exec();
+    return this.userModel.findOne({ email }).select('-blogs -__v -createdAt -updatedAt');
   }
 }

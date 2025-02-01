@@ -14,10 +14,9 @@ import Login from './components/LoginComponent';
 import { Logout } from './components/Logout';
 
 function App() {
-  const blogs = useSelector(state => state.blog.AllBlogs);
-
+  // console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
   return (
-    <GoogleOAuthProvider clientId="598434440057-4o5u6b53q8nelcuq4l6fpaiflhv59han.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
     <Router>
       <Header />
       <Routes>

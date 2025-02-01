@@ -14,10 +14,10 @@ export class User extends Model<UserDocument> {
   email: string;
 
   @Prop({ required: true })
-  password: string;
+  googleId: string;
 
-  @Prop({ required: true })
-  age: number;
+  @Prop({ })
+  picUrl?: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Blog', default: []})
   blogs: Types.ObjectId[] = [];

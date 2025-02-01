@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import api from '../../utils/axiosConfig.js';
 import {
   fetchBlogsStart,
@@ -37,6 +38,7 @@ export const fetchBlogById = (id) => async (dispatch) => {
 export const createBlog = (blogData) => async (dispatch) => {
   try {
     dispatch(createBlogStart());
+    const userEmail = useSelector((state) => state.auth.user.email);
     const response = await api.post('http://localhost:3000/blogs', blogData);
     dispatch(createBlogSuccess(response.data));
     return response.data;

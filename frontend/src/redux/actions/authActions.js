@@ -53,7 +53,7 @@ export const loginWithGoogle = (googleToken) => async (dispatch) => {
 
 		dispatch(
 			loginSuccess({
-				token: data.token,
+				token: data.access_token,
 				user: data.user,
 				authMethod: 'google',
 			})

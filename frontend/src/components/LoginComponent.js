@@ -2,16 +2,17 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, loginWithGoogle } from '../redux/actions/authActions';
 import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
 
   const handleGoogleSuccess = (credentialResponse) => {
     dispatch(loginWithGoogle(credentialResponse.credential));
+    navigate('/');
   };
 
   const handleGoogleError = () => {

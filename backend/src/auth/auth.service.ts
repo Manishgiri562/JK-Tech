@@ -10,9 +10,13 @@ export class AuthService {
             private readonly jwtService: JwtService,
       ) {}
 
-      async validateUser(email: string, password: string): Promise<any> {
-            const user: any = await this.usersService.findByEmail(email);
-            if (user && (await bcrypt.compare(password, user.password))) {
+      async validateUser(payload: any): Promise<any> {
+            const {email, name, sub, picUrl} = payload;
+            let user: any = await this.usersService.findByEmail(email);
+            if(!user) {
+                  user = await this.usersService.createUser(email, name, sub, picUrl);
+            }
+            if (user && user.googleId === sub) {
                   return user;
             }
             throw new UnauthorizedException('Invalid credentials');
@@ -22,6 +26,7 @@ export class AuthService {
             const payload = { email: user.email, sub: user._id };
             return {
               access_token: this.jwtService.sign(payload),
+              user: user,
             };
       }
 }

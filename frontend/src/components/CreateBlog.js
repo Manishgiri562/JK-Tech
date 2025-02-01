@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createBlog } from '../redux/actions/blogAction';
+import {useDispatch, useSelector} from 'react-redux';
+import {createBlog} from '../redux/actions/blogAction';
 
 const BlogForm = () => {
 	const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 	const dispatch = useDispatch();
-      const submitRef = React.useRef(null);
+	const submitRef = React.useRef(null);
 	const [formData, setFormData] = useState({
 		title: '',
 		content: '',
 		tags: '',
 	});
 	useEffect(() => {
-		console.log('isAuthenticated:', isAuthenticated);
+		// console.log('isAuthenticated:', isAuthenticated);
 	}, [isAuthenticated]);
 	const handleChange = (e) => {
 		setFormData({...formData, [e.target.name]: e.target.value});
@@ -20,22 +20,21 @@ const BlogForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('Form Submitted:', formData);
-            submitRef.current.disabled = true;
-            dispatch(createBlog(formData));
-            submitRef.current.disabled = false;
-            setFormData({
-                  title: '',
-                  content: '',
-                  tags: '',
-            });
+		// console.log('Form Submitted:', formData);
+		submitRef.current.disabled = true;
+		dispatch(createBlog(formData));
+		submitRef.current.disabled = false;
+		setFormData({
+			title: '',
+			content: '',
+			tags: '',
+		});
 	};
-	if(!isAuthenticated){
-		return <h2>Login to create a post</h2>
+	if (!isAuthenticated) {
+		return <h2>Login to create a post</h2>;
 	}
 	return (
 		<div className="form-container">
-			
 			<form onSubmit={handleSubmit}>
 				<h2>Create a Post</h2>
 
@@ -68,7 +67,9 @@ const BlogForm = () => {
 					onChange={handleChange}
 				/>
 
-				<button type="submit" ref={submitRef}>Submit</button>
+				<button type="submit" ref={submitRef}>
+					Submit
+				</button>
 			</form>
 
 			<style>{`

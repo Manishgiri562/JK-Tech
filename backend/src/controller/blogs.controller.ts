@@ -22,6 +22,7 @@ export class BlogsController {
   @UseGuards(JwtAuthGuard)
   @Post()
   createBlog(@Body() body: BlogDTO, @Req() req: any): Promise<Blog> {
+    // console.log(req.user);
     return this.blogsService.create(body.title, body.content, req.user.userId, body.tags);
   }
 
